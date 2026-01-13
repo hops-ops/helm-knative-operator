@@ -1,0 +1,13 @@
+apiVersion: helm.hops.ops.com.ai/v1alpha1
+kind: KnativeOperator
+metadata:
+  name: knative-operator
+  namespace: example-env
+spec:
+  clusterName: example-cluster
+  labels:
+    team: platform
+  namespace: knative-operator
+  values:
+    operator:
+      replicas: 1

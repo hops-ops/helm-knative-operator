@@ -1,0 +1,38 @@
+# code: language=yaml
+#
+# Helm release for knative-operator
+#
+
+{{- $ko := $state.knativeOperator }}
+
+---
+apiVersion: helm.m.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: {{ $ko.releaseName }}
+  annotations:
+    {{ setResourceNameAnnotation "helm-release-knative-operator" }}
+  labels: {{ $ko.labels | toJson }}
+spec:
+  managementPolicies: {{ $ko.managementPolicies | toJson }}
+  forProvider:
+    chart:
+      name: knative-operator
+      repository: https://knative.github.io/operator
+      version: 1.16.2
+    namespace: {{ $ko.namespace }}
+    {{- if $ko.overrideAllValues }}
+    values:
+      {{- toYaml $ko.overrideAllValues | nindent 6 }}
+    {{- else }}
+    values:
+      fullnameOverride: knative-operator
+      nameOverride: knative-operator
+      {{- if $ko.values }}
+      {{- toYaml $ko.values | nindent 6 }}
+      {{- end }}
+    {{- end }}
+  rollbackLimit: 3
+  providerConfigRef:
+    name: {{ $ko.providerConfigRef.name }}
+    kind: {{ $ko.providerConfigRef.kind }}
