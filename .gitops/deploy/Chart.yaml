@@ -2,4 +2,4 @@ apiVersion: v2
 name: helm-knative-operator
 version: 0.0.0
 description: GitOps packaging for the Knative Operator Crossplane configuration
-appVersion: 1.16.2
+appVersion: v1.20.0
